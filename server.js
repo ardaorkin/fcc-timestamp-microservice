@@ -31,25 +31,31 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/timestamp/:date?", (req, res) => {
   var jsonResponse = {}
   const { date } = req.params
+  var regex = /[^0-9]/i
   if (date != undefined) {
-    if (new Date(date).toUTCString() === "Invalid Date") {
-      if (new Date(date * 1000).toUTCString() === "Invalid Date") {
+    if(date.match(regex) == null){
+      var dateParam = parseInt(date)
+    }else{
+      var dateParam = date
+    }
+    if (new Date(dateParam).toUTCString() === "Invalid Date") {
+      if (new Date(dateParam).toUTCString() === "Invalid Date") {
         jsonResponse = { error: "Invalid Date" }
       } else {
         jsonResponse = {
-          unix: parseInt(date),
-          utc: new Date(date * 1000).toUTCString()
+          unix: parseInt(dateParam),
+          utc: new Date(dateParam).toUTCString()
         }
       }
     } else {
       jsonResponse = {
-        unix: new Date(date).getTime() / 1000,
-        utc: new Date(date).toUTCString()
+        unix: new Date(dateParam).getTime(),
+        utc: new Date(dateParam).toUTCString()
       }
     }
   }else if(date == undefined){
     jsonResponse = {
-      unix: new Date().toUTCString(),
+      unix: new Date().getTime(),
       utc: new Date().toUTCString()
     }
   }

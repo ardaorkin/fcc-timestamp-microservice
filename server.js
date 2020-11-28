@@ -49,7 +49,7 @@ app.get("/api/timestamp/:date?", (req, res) => {
     }
   }else if(date == undefined){
     jsonResponse = {
-      unix: Math.round((new Date()).getTime() / 1000),
+      unix: new Date().toUTCString(),
       utc: new Date().toUTCString()
     }
   }
